@@ -1,0 +1,73 @@
+import pandas as pd
+import plotly.express as px
+from IPython.display import Image
+import warnings
+warnings.filterwarnings("ignore")
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.figure_factory as ff
+import plotly.io as pio
+import io
+import plotly.graph_objects as go
+from PIL import Image
+import string
+from pandas.api.types import is_numeric_dtype
+import datetime as DT
+from data_analysis import data_analysis
+
+def data_visualization():
+    data = data_analysis()
+    columns = ['M01AB_daily','M01AE_daily','N02BA_daily', 'N02BE_daily', 'N05B_daily', 'N05C_daily']
+    if not pd.api.types.is_datetime64_any_dtype(data.index):
+        data.index = pd.to_datetime(data.index)
+    # Define start and end times for slicing
+    start = DT.datetime(2014, 1, 1, 0, 0, 0)
+    end = DT.datetime(2014, 1, 15, 23, 0, 0)
+    
+    for col in columns:
+        fig = go.Figure()
+        sliced_data = data[(data.index >= start) & (data.index <= end)]
+        fig.add_trace(go.Scatter(x=sliced_data.index, y=sliced_data[col], mode='lines', name=col))
+        fig.update_layout(title=f"Plot of {col}", template='plotly_dark')
+        fig.update_xaxes(showgrid=False, zeroline=False)
+        fig.update_yaxes(showgrid=False, zeroline=False)
+        fig.write_image(f"series_{col}.jpg")
+    
+    start = DT.datetime(2014, 1, 15, 1, 0, 0)
+    end = DT.datetime(2014, 1, 15, 23, 0, 0)
+    
+    for col in columns:
+        fig = go.Figure()
+        sliced_data = data[(data.index >= start) & (data.index <= end)]
+        fig.add_trace(go.Scatter(x=sliced_data.index, y=sliced_data[col], mode='lines', name=col))
+        fig.update_layout(title=f"Plot of {col}", template='plotly_dark')
+        fig.update_xaxes(showgrid=False, zeroline=False)
+        fig.update_yaxes(showgrid=False, zeroline=False)
+        fig.write_image(f"series_{col}.jpg")
+    
+    for col in columns:
+        fig = px.box(data, y=col)
+        fig.update_layout(template='plotly_dark')
+        fig.update_xaxes(showgrid=False, zeroline=False)
+        fig.update_yaxes(showgrid=False, zeroline=False)
+        fig.write_image(f"box_{col}.jpg")
+    
+    '''for col in columns:
+        fig = ff.create_distplot([data[col].values], group_labels=[col])
+        fig.update_layout(template='plotly_dark')
+        fig.update_xaxes(showgrid=False, zeroline=False)
+        fig.update_yaxes(showgrid=False, zeroline=False)
+        fig.write_image(f"dist_{col}.jpg")'''
+    
+    df = data.loc[:, columns]
+    y = df.corr().columns.tolist()
+    z = df.corr().values.tolist()
+    z_text = np.around(z, decimals=4)  # Only show rounded value (full value on hover)
+    fig = ff.create_annotated_heatmap(z, x=y, y=y, annotation_text=z_text, colorscale=px.colors.sequential.Cividis_r, showscale=True)
+    fig.update_layout(template='plotly_dark')
+    fig.write_image(f"heatmap.jpg")
+    
+    return data
+
+data_visualization()
