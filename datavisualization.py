@@ -18,7 +18,7 @@ from data_analysis import data_analysis
 
 def data_visualization():
     data = data_analysis()
-    columns = ['M01AB_daily','M01AE_daily','N02BA_daily', 'N02BE_daily', 'N05B_daily', 'N05C_daily']
+    columns = ['M01AB','M01AE','N02BA', 'N02BE', 'N05B', 'N05C']
     if not pd.api.types.is_datetime64_any_dtype(data.index):
         data.index = pd.to_datetime(data.index)
     # Define start and end times for slicing
@@ -35,7 +35,7 @@ def data_visualization():
         fig.write_image(f"series_{col}.jpg")
     
     start = DT.datetime(2014, 1, 15, 1, 0, 0)
-    end = DT.datetime(2014, 1, 15, 23, 0, 0)
+    end = DT.datetime(2014, 10, 15, 23, 0, 0)
     
     for col in columns:
         fig = go.Figure()
