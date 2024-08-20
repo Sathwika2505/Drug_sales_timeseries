@@ -1,9 +1,9 @@
 import pandas as pd
 
 def data_extraction():
-    daily = pd.read_csv("/home/ubuntu/Object_detection_FCOS/Drugsales/salesdaily.csv")
-    weekly = pd.read_csv("/home/ubuntu/Object_detection_FCOS/Drugsales/salesweekly.csv")
-    monthly = pd.read_csv("/home/ubuntu/Object_detection_FCOS/Drugsales/salesmonthly.csv")
+    daily = pd.read_csv("salesdaily.csv")
+    weekly = pd.read_csv("salesweekly.csv")
+    monthly = pd.read_csv("salesmonthly.csv")
     print("daily :",daily)
     print("weekly :",weekly)
     print("monthly :",monthly)
