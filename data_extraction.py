@@ -1,7 +1,7 @@
 import pandas as pd
 
 def data_extraction():
-    monthly = pd.read_csv("/home/ubuntu/Object_detection_FCOS/Drugsales/salesmonthly.csv")
+    monthly = pd.read_csv("salesmonthly.csv")
     print("monthly :",monthly)
     monthly['datum'] = pd.to_datetime(monthly['datum'], format= '%Y-%m-%d')
     
